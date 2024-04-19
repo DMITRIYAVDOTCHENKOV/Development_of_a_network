@@ -1,0 +1,15 @@
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\bin\Debug\net8.0\Development_of_a_network.exe
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\bin\Debug\net8.0\Development_of_a_network.deps.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\bin\Debug\net8.0\Development_of_a_network.runtimeconfig.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\bin\Debug\net8.0\Development_of_a_network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\bin\Debug\net8.0\Development_of_a_network.pdb
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.GeneratedMSBuildEditorConfig.editorconfig
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.AssemblyInfoInputs.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.AssemblyInfo.cs
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.csproj.CoreCompileInputs.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.sourcelink.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\refint\Development_of_a_network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.pdb
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\Development_of_a_network.genruntimeconfig.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Development_of_a_network\obj\Debug\net8.0\ref\Development_of_a_network.dll
