@@ -1,0 +1,15 @@
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\bin\Debug\net8.0\Network.exe
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\bin\Debug\net8.0\Network.deps.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\bin\Debug\net8.0\Network.runtimeconfig.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\bin\Debug\net8.0\Network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\bin\Debug\net8.0\Network.pdb
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.GeneratedMSBuildEditorConfig.editorconfig
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.AssemblyInfoInputs.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.AssemblyInfo.cs
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.csproj.CoreCompileInputs.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.sourcelink.json
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\refint\Network.dll
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.pdb
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\Network.genruntimeconfig.cache
+D:\ВСЕ ПО ПРОГРАМИРОВАНИЮ\С#\Development_of_a_network\Network\obj\Debug\net8.0\ref\Network.dll
