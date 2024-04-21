@@ -1,4 +1,5 @@
 ﻿using Network;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -9,49 +10,35 @@ namespace ClientNew
     {
         public static void Main(string[] args)
         {
-
-
-            SendMessage(args[0], args[1]);
-        }
-
-        public static void SendMessage(string From, string ip)
-        {
-
-            UdpClient udpClient = new UdpClient();
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
-
-
             while (true)
             {
-                string messageText;
-
-                do
+                Console.WriteLine("Введите сообщение (для выхода введите 'Exit'):");
+                string input = Console.ReadLine();
+                if (input.ToLower() == "exit")
                 {
-                    Console.Clear();
-                    Console.WriteLine("Введите сообщение. ");
-                    messageText = Console.ReadLine();
-
+                    break;
                 }
-                while (string.IsNullOrEmpty(messageText));
-                Message message = new Message() { Text = messageText, NicNameFrom = From, NicNameTo = "Server", DateTime = DateTime.Now };
-                string json = message.SerializeMessageToJson();
-
-                byte[] date = Encoding.UTF8.GetBytes(json);
-                udpClient.Send(date, date.Length, iPEndPoint);
-
-
-                // Ожидание подтверждения о доставке сообщения от сервера
-                byte[] confirmationBuffer = udpClient.Receive(ref iPEndPoint);
-                string confirmationMessage = Encoding.UTF8.GetString(confirmationBuffer);
-                Console.WriteLine("Получено подтверждение о доставке сообщения от сервера: " + confirmationMessage);
-
-                // Отображение подтверждения о том, что сообщение было успешно обработано сервером
-                byte[] responseBuffer = udpClient.Receive(ref iPEndPoint);
-                string responseMessage = Encoding.UTF8.GetString(responseBuffer);
-                Console.WriteLine("Ответ от сервера: " + responseMessage);
-
+                SendMessage("Dima", input);
             }
+        }
 
+        public static void SendMessage(string From, string messageText, string ip = "127.0.0.1", int port = 12345)
+        {
+            UdpClient udpClient = new UdpClient();
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+
+            Message message = new Message() { Text = messageText, NicNameFrom = From, NicNameTo = "Server", DateTime = DateTime.Now };
+            string json = message.SerializeMessageToJson();
+            byte[] data = Encoding.UTF8.GetBytes(json);
+
+            udpClient.Send(data, data.Length, iPEndPoint);
+
+            byte[] buffer = udpClient.Receive(ref iPEndPoint);
+            var answer = Encoding.UTF8.GetString(buffer);
+
+            Console.WriteLine(answer);
+
+            udpClient.Close();
         }
     }
 }
