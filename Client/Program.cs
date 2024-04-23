@@ -7,44 +7,27 @@ using System.Threading.Tasks;
 
 namespace ClientNew
 {
-    public class Program
+    // Класс для обработки сообщений
+    public class MessageHandler
     {
-        private static bool serverRunning = true;
+        private UdpClientSingleton udpClientSingleton;
 
-        public static async Task Main(string[] args)
+        public MessageHandler()
         {
-            while (true)
-            {
-                if (serverRunning)
-                {
-                    Console.WriteLine("Введите сообщение (для выхода введите 'Exit'):");
-                    string input = Console.ReadLine();
-                    if (input.ToLower() == "exit")
-                    {
-                        break;
-                    }
-                    await SendMessage("Dima", input);
-                }
-                else
-                {
-                    Console.WriteLine("Сервер не доступен. Повторная попытка подключения через 5 секунд...");
-                    await Task.Delay(5000); // Подождать 5 секунд перед повторной попыткой подключения
-                    serverRunning = true;
-                }
-            }
+            udpClientSingleton = UdpClientSingleton.GetInstance();
         }
 
-        public static async Task SendMessage(string From, string messageText, string ip = "127.0.0.1", int port = 12345)
+        public async Task<string> SendMessage(string from, string messageText, string ip = "127.0.0.1", int port = 12345)
         {
-            UdpClient udpClient = new UdpClient();
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-
-            Message message = new Message() { Text = messageText, NicNameFrom = From, NicNameTo = "Server", DateTime = DateTime.Now };
-            string json = message.SerializeMessageToJson();
-            byte[] data = Encoding.UTF8.GetBytes(json);
-
             try
             {
+                UdpClient udpClient = udpClientSingleton.GetUdpClient();
+                IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+
+                Message message = new Message() { Text = messageText, NicNameFrom = from, NicNameTo = "Server", DateTime = DateTime.Now };
+                string json = message.SerializeMessageToJson();
+                byte[] data = Encoding.UTF8.GetBytes(json);
+
                 await udpClient.SendAsync(data, data.Length, iPEndPoint);
 
                 UdpReceiveResult result;
@@ -55,22 +38,64 @@ namespace ClientNew
                 catch (SocketException ex)
                 {
                     Console.WriteLine($"Ошибка при приеме ответа от сервера: {ex.Message}");
-                    serverRunning = false; // Пометить сервер как недоступный
-                    return;
+                    return null;
                 }
 
-                var answer = Encoding.UTF8.GetString(result.Buffer);
-                Console.WriteLine(answer);
+                return Encoding.UTF8.GetString(result.Buffer);
             }
             catch (SocketException)
             {
-                // Обработка ситуации, когда сервер остановлен
                 Console.WriteLine("Ошибка: сервер недоступен.");
-                serverRunning = false;
+                return null;
             }
-            finally
+        }
+    }
+
+    // Класс-одиночка для UdpClient
+    public class UdpClientSingleton
+    {
+        private static UdpClientSingleton instance;
+        private UdpClient udpClient;
+
+        private UdpClientSingleton()
+        {
+            udpClient = new UdpClient();
+        }
+
+        public static UdpClientSingleton GetInstance()
+        {
+            if (instance == null)
             {
-                udpClient.Close();
+                instance = new UdpClientSingleton();
+            }
+            return instance;
+        }
+
+        public UdpClient GetUdpClient()
+        {
+            return udpClient;
+        }
+    }
+
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            MessageHandler messageHandler = new MessageHandler();
+
+            while (true)
+            {
+                Console.WriteLine("Введите сообщение (для выхода введите 'Exit'):");
+                string input = Console.ReadLine();
+                if (input.ToLower() == "exit")
+                {
+                    break;
+                }
+                string response = await messageHandler.SendMessage("Dima", input);
+                if (response != null)
+                {
+                    Console.WriteLine(response);
+                }
             }
         }
     }

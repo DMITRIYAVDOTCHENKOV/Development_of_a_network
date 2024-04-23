@@ -7,55 +7,84 @@ using System.Threading;
 
 namespace Network_
 {
-    public class Program
+    // Определяем интерфейс для наблюдателя
+    public interface IMessageObserver
     {
-        public static void Main(string[] args)
+        void OnMessageReceived(Message message);
+    }
+
+    // Реализуем класс для наблюдателя (в данном случае, для вывода сообщений в консоль)
+    public class ConsoleMessageObserver : IMessageObserver
+    {
+        public void OnMessageReceived(Message message)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            Console.WriteLine("Для остановки сервера нажмите клавишу 'q'.");
-            // Запуск сервера в отдельном потоке
-            ThreadPool.QueueUserWorkItem(obj =>
+            Console.WriteLine($"{message.DateTime} получено сообщение {message.Text} от {message.NicNameFrom}");
+            message.Print();
+        }
+    }
+
+    // Реализуем класс для шаблона Singleton
+    public class UdpClientSingleton
+    {
+        private static UdpClientSingleton instance;
+        private UdpClient udpClient;
+
+        // Приватный конструктор, чтобы предотвратить создание объекта извне
+        private UdpClientSingleton()
+        {
+            udpClient = new UdpClient(12345);
+        }
+
+        // Метод для получения экземпляра класса
+        public static UdpClientSingleton GetInstance()
+        {
+            if (instance == null)
             {
-                Server("Dima", cancellationTokenSource.Token);
-            });
-
-            // Ожидание нажатия клавиши 'q' для остановки сервера
-            while (Console.ReadKey().Key != ConsoleKey.Q) { }
-            cancellationTokenSource.Cancel(); // Отмена работы сервера
-            Console.WriteLine("Сервер остановлен.");
+                instance = new UdpClientSingleton();
+            }
+            return instance;
         }
 
-        public void task1()
+        // Метод для получения UdpClient
+        public UdpClient GetUdpClient()
         {
-            Message msg = new Message() { Text = "Hello", DateTime = DateTime.Now, NicNameFrom = "Dima", NicNameTo = "ALL" };
-            string json = msg.SerializeMessageToJson();
-            Console.WriteLine(json);
-            Message? msgDeserialized = Message.DeseriaLizeFromJson(json);
+            return udpClient;
+        }
+    }
+
+    public class ChatServer
+    {
+        private UdpClientSingleton udpClientSingleton;
+        private IMessageObserver messageObserver;
+        private CancellationToken cancellationToken;
+
+        public ChatServer(IMessageObserver observer, CancellationToken token)
+        {
+            messageObserver = observer;
+            cancellationToken = token;
+            udpClientSingleton = UdpClientSingleton.GetInstance();
         }
 
-        public static void Server(string name, CancellationToken cancellationToken)
+        public void Start()
         {
-            UdpClient udpClient = new UdpClient(12345);
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, 0);
-
             Console.WriteLine("Сервер ждет сообщение от клиента");
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    byte[] buffer = udpClient.Receive(ref iPEndPoint);
+                    IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, 0); // Объявляем iPEndPoint здесь
+                    byte[] buffer = udpClientSingleton.GetUdpClient().Receive(ref iPEndPoint);
                     var messageText = Encoding.UTF8.GetString(buffer);
 
                     ThreadPool.QueueUserWorkItem(obj =>
                     {
                         Message message = Message.DeseriaLizeFromJson(messageText);
-                        Console.WriteLine($"{message.DateTime} получено сообщение {message.Text} от {message.NicNameFrom}");
-                        message.Print();
+                        messageObserver.OnMessageReceived(message);
 
-                        // Передача сообщения клиенту
+                        // Передача подтверждения клиенту
                         byte[] confirmation = Encoding.UTF8.GetBytes("Получено сообщение");
-                        udpClient.Send(confirmation, confirmation.Length, iPEndPoint);
+                        udpClientSingleton.GetUdpClient().Send(confirmation, confirmation.Length, iPEndPoint);
                     });
                 }
                 catch (SocketException)
@@ -65,7 +94,32 @@ namespace Network_
                 }
             }
             // Закрытие UdpClient при завершении работы сервера
-            udpClient.Close();
+            udpClientSingleton.GetUdpClient().Close();
+        }
+    }
+
+
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            Console.WriteLine("Для остановки сервера нажмите клавишу 'q'.");
+
+            // Создаем экземпляр наблюдателя для вывода сообщений в консоль
+            IMessageObserver consoleObserver = new ConsoleMessageObserver();
+
+            // Создаем экземпляр сервера чата и запускаем его в отдельном потоке
+            ChatServer chatServer = new ChatServer(consoleObserver, cancellationTokenSource.Token);
+            ThreadPool.QueueUserWorkItem(obj =>
+            {
+                chatServer.Start();
+            });
+
+            // Ожидание нажатия клавиши 'q' для остановки сервера
+            while (Console.ReadKey().Key != ConsoleKey.Q) { }
+            cancellationTokenSource.Cancel(); // Отмена работы сервера
+            Console.WriteLine("Сервер остановлен.");
         }
     }
 }
